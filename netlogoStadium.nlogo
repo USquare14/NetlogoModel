@@ -563,24 +563,9 @@ HORIZONTAL
 
 SLIDER
 14
-530
+539
 186
-563
-maxSight
-maxSight
-2
-20
-5
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-14
-567
-186
-600
+572
 maxGroupSize
 maxGroupSize
 2
@@ -603,9 +588,9 @@ learningType
 
 SLIDER
 17
-608
+580
 189
-641
+613
 leaderVolume
 leaderVolume
 3
@@ -629,9 +614,9 @@ police
 
 SLIDER
 20
-654
+626
 192
-687
+659
 policeCount
 policeCount
 5
