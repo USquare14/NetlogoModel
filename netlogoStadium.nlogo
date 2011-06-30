@@ -244,10 +244,10 @@ if closestExit != Nobody [ face (closestExit)
 flock
 let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
-  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit") ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit")]]]
+  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself)) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself))]]]
 ;fd 1
-if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot [set rightExit (rightExit + 1) set reachExit true die]]
-  
+if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot [set rightExit (rightExit + 1)] set reachExit true die]
+
 end
 
 to flock  ;; turtle procedure
