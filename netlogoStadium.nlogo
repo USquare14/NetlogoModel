@@ -1,4 +1,4 @@
-globals [middle]
+globals [middle rightExit]
 turtles-own [
   
   knowledge 
@@ -26,10 +26,11 @@ turtles-own [
 
 patches-own [ptype pheight exit exitNumber]
 to setup 
+  
   clear-all
   ask patches [set pcolor violet]
   import-pcolors nameMap
-  
+  set rightExit 0
   set middle patch (max-pxcor / 2) (max-pycor / 2)
   ifelse teams = false [ask patches with [
       shade-of? pcolor turquoise or shade-of? pcolor cyan or shade-of? pcolor sky] [
@@ -78,7 +79,7 @@ to setup
  
   if seatDensity != 50 [ask n-of ((count Turtles) / seatDensity) turtles [die]]
   
- 
+  ask patches with [ptype = "exit"] [ifelse (pxcor < 36 and pycor > 36) [set exitNumber 0] [ifelse (pxcor > 36 and pycor < 36) [set exitNumber 1] [ifelse (pxcor > 36 and pycor > 280) [set exitNumber 2] [set exitNumber 3]]]] 
 ;  if globalNotification = true [
 ;    ask patches with [ptype = "exit"] [
 ;      ask turtles in-radius 150 [
@@ -194,8 +195,8 @@ end
 to locateExit
 ; 70 is typical human cone of vision
 
-  set closestExit (one-of patches in-cone 50 70 with [ptype = "exit"])
-  if closestExit = nobody and any? patches in-cone 10 70 with [ptype = "police"] [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police"]]
+  set closestExit (one-of patches in-cone 50 70 with [ptype = "exit" and exitNumber = [parkingLot] of myself])
+  if closestExit = nobody and any? patches in-cone 10 70 with [ptype = "police"] [if ([exitNumber] of ([exit] of one-of patches in-cone 10 70 with [ptype = "police"]) = parkingLot)[ set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police"]]]
   
 ;  ifelse exit = Nobody [
 ;    set leaderTurtle one-of turtles in-cone 10 70 with [closestExit != Nobody] 
@@ -207,7 +208,7 @@ end
 to learnExit 
   if learningType = "local" [
   if any? turtles in-radius leaderVolume with [closestExit != nobody][
-  set closestExit [closestExit] of (one-of turtles in-radius 10 with [closestExit != nobody])
+  set closestExit [closestExit] of (one-of turtles in-radius 10 with [closestExit != nobody and parkingLot = [parkingLot] of myself])
   let temp nobody
   ask closestExit  [set temp one-of patches in-radius 5 with [ptype = "exit"]]
   set closestExit temp
@@ -218,8 +219,8 @@ to learnExit
   set closestExit [closestExit] of one-of flockmates with [groupLeader = true]] ]
   ; nobody in group knows, find out from people in small area
   if groupLeader = true [if closestExit = nobody [
-    if any? turtles in-radius leaderVolume with [closestExit != nobody][
-      set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody])
+    if any? turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself][
+      set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself])
       let temp nobody
       ask closestExit  [set temp one-of patches in-radius 8 with [ptype = "exit"]]
       set closestExit temp ]] ]
@@ -245,7 +246,7 @@ let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
   if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit") ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit")]]]
 ;fd 1
-if any? patches in-radius 4 with [ptype = "exit"] [set reachExit true die]
+if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot [set rightExit (rightExit + 1)] set reachExit true die]
   
 end
 
@@ -370,9 +371,9 @@ end
 
 @#$#@#$#@
 GRAPHICS-WINDOW
-295
+312
 10
-1107
+1124
 687
 -1
 -1
@@ -640,6 +641,17 @@ policeCount
 1
 NIL
 HORIZONTAL
+
+MONITOR
+215
+402
+281
+447
+NIL
+rightExit
+17
+1
+11
 
 @#$#@#$#@
 WHAT IS IT?
