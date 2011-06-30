@@ -23,7 +23,7 @@ turtles-own [
   family
   ]
 
-"this is only on the parking branch" 
+
 patches-own [ptype pheight exit exitNumber]
 to setup 
   clear-all
