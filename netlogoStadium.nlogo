@@ -246,7 +246,7 @@ let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
   if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit") ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or ptype = "exit")]]]
 ;fd 1
-if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot [set rightExit (rightExit + 1)] set reachExit true die]
+if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot [set rightExit (rightExit + 1) set reachExit true die]]
   
 end
 
@@ -351,13 +351,13 @@ end
 
 to-report avoid_obstacles
     let i 0
-    while [([ptype] of patch-ahead i = "concourse" or [ptype] of patch-ahead i = "exit" ) and i <= 10]
+    while [([ptype] of patch-ahead i = "concourse" or ([ptype] of patch-ahead i = "exit" and [exitNumber] of patch-ahead i = parkingLot ) and i <= 10)]
     [set i (i + 1) ]
-    if ([ptype] of patch-ahead i != "concourse" and [ptype] of patch-ahead i != "exit")
+    if ([ptype] of patch-ahead i != "concourse" and ([ptype] of patch-ahead i != "exit" or ([ptype] of patch-ahead i = "exit" and [exitNumber] of patch-ahead i != parkingLot)))
     [
-        if [ptype] of patch-at-heading-and-distance (heading - 5) (i + 1) != "concourse" and [ptype] of patch-at-heading-and-distance (heading - 5) (i + 1) != "exit"
+        if [ptype] of patch-at-heading-and-distance (heading - 5) (i + 1) != "concourse" and ([ptype] of patch-at-heading-and-distance (heading - 5) (i + 1) != "exit" or [ptype] of patch-at-heading-and-distance (heading - 5) (i + 1) = "exit" and [exitNumber] of patch-at-heading-and-distance (heading - 5) (i + 1) != parkingLot)
         [
-            ifelse [ptype] of patch-at-heading-and-distance (heading + 5) (i + 1) != "concourse" and [ptype] of patch-at-heading-and-distance (heading + 5) (i + 1) != "exit"
+            ifelse [ptype] of patch-at-heading-and-distance (heading + 5) (i + 1) != "concourse" and ([ptype] of patch-at-heading-and-distance (heading + 5) (i + 1) != "exit" or [ptype] of patch-at-heading-and-distance (heading + 5) (i + 1) = "exit" and [exitNumber] of patch-at-heading-and-distance (heading + 5) (i + 1) != parkingLot)
             [ 
                 ifelse random 1 = 0
                 [ set i 0 rt 40 ]
@@ -366,7 +366,7 @@ to-report avoid_obstacles
             [ifelse heading <= 180 and [ptype] of patch-at-heading-and-distance (heading - 5 ) ( i + 1 ) = "wall" [set i 0 rt 60 ][set i 0 lt 60]]
         ]
     ]
-   ifelse count [other turtles-here] of patch-ahead 1 = 0  and ([ptype] of patch-ahead 1 = "concourse" or [ptype] of patch-ahead 1 = "exit") [report true] [report false]
+   ifelse count [other turtles-here] of patch-ahead 1 = 0  and ([ptype] of patch-ahead 1 = "concourse" or ([ptype] of patch-ahead 1 = "exit" and [exitNumber] of patch-ahead 1 = parkingLot)) [report true] [report false]
 end
 
 @#$#@#$#@
