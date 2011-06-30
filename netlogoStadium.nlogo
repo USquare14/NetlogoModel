@@ -35,17 +35,17 @@ to setup
       shade-of? pcolor turquoise or shade-of? pcolor cyan or shade-of? pcolor sky] [
       set ptype "seat" if (round (distance middle) mod (rowDensity) = 0  ) [
         sprout 1 [ 
-          set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes  set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse false set closestAisle Nobody set reachAisle false set flockmates turtles-here set size 3 set team color] ]]] [
+          set parkingLot one-of [0 1 2 3] set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes  set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse false set closestAisle Nobody set reachAisle false set flockmates turtles-here set size 3 set team color] ]]] [
     ask patches with [
       shade-of? pcolor turquoise or shade-of? pcolor cyan or shade-of? pcolor sky][
        set ptype "seat" if (round (distance middle) mod (rowDensity) = 0 and pycor > (max-pycor / 2 )) [
          sprout 1 [
-           set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse false set closestAisle Nobody set flockmates turtles-here set reachAisle false set size 3 set color orange set team color ] ]]
+           set parkingLot one-of [0 1 2 3] set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse false set closestAisle Nobody set flockmates turtles-here set reachAisle false set size 3 set color orange set team color ] ]]
     ask patches with [
       shade-of? pcolor turquoise or shade-of? pcolor cyan or shade-of? pcolor sky][
        set ptype "seat" if (round (distance middle) mod (rowDensity) = 0 and pycor < (max-pycor / 2) ) [
          sprout 1 [ 
-           set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes set reachExit false set closestExit Nobody set leaderTurtle Nobody  set reachConcourse false set closestAisle Nobody set flockmates turtles-here set reachAisle false set size 3 set color black set team color] ]]]
+           set parkingLot one-of [0 1 2 3] set family turtles-here set expandGroup true set shape "person" set groupLeader false set knowledge 0 getAttributes set reachExit false set closestExit Nobody set leaderTurtle Nobody  set reachConcourse false set closestAisle Nobody set flockmates turtles-here set reachAisle false set size 3 set color black set team color] ]]]
   ask patches with [
     shade-of? pcolor yellow] [
     set ptype "aisle" set pheight distance middle]
@@ -90,7 +90,7 @@ to setup
   if police = true [
     ask n-of policeCount (patches with [ptype = "concourse" and not any? patches in-radius 2 with [ptype != "concourse"] ]) [ask patches in-radius 1 with [ptype = "concourse"] [set ptype "police" set pcolor blue set exit (min-one-of patches with [ptype = "exit"] [distance myself])]]]
   
-  ask turtles [let famSize random 5 if count turtles in-radius 5 >= famsize [set family n-of  famSize turtles in-radius 6 ask family [set family [family] of myself]]]
+  ask turtles [let famSize random 5 if count turtles in-radius 5 >= famsize [set family n-of  famSize turtles in-radius 6 ask family [set family [family] of myself set parkingLot [parkingLot] of myself ]]]
 end
 
 to getAttributes
@@ -129,7 +129,7 @@ to go
     ask n-of upperLevelQuantity patches with [
       ptype = "upperLevel" and count turtles-here = 0] [
       sprout 1 [
-        set family turtles-here set expandGroup true set shape "person" getAttributes set flockmates turtles-here set groupLeader false set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse true set closestAisle Nobody set reachAisle true set size 3 set color (one-of list orange black) set team color]]]
+        set parkingLot one-of [0 1 2 3] set family turtles-here set expandGroup true set shape "person" getAttributes set flockmates turtles-here set groupLeader false set reachExit false set closestExit Nobody set leaderTurtle Nobody set reachConcourse true set closestAisle Nobody set reachAisle true set size 3 set color (one-of list orange black) set team color]]]
   ask turtles [ ifelse reachAisle = false [  
           if closestAisle = Nobody and leaderTurtle = Nobody[
             locateAisle] moveToAisle] [
@@ -279,7 +279,7 @@ to-report leadershipFunction
 end
 
 to find-flockmates  ;; turtle procedure
-  let newFlockmates other turtles in-cone maxGroupSize 180  with [socialComparison self myself > 50]
+  let newFlockmates other turtles in-cone maxGroupSize 180  with [socialComparison self myself > 50 and parkingLot = [parkingLot] of myself]
   set flockmates (turtle-set flockmates newFlockmates family)
   ask flockmates [set flockmates (turtle-set ([flockmates] of myself) family)]
 end
