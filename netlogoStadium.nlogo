@@ -23,8 +23,8 @@ turtles-own [
   family
   ]
 
-
-patches-own [ptype pheight exit]
+"this is only on the parking branch" 
+patches-own [ptype pheight exit exitNumber]
 to setup 
   clear-all
   ask patches [set pcolor violet]
