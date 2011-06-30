@@ -251,7 +251,9 @@ if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of pat
 end
 
 to flock  ;; turtle procedure
-
+  
+  ;flockmates too far away, find new flockmates
+  if count flockmates in-radius 10 < count flockmates [set flockmates turtles-here]
   if expandGroup = true [if random 10 < 7 [ask flockmates [set expandGroup false]]]
   if count flockmates < maxGroupSize and expandGroup = true [find-flockmates]
   if any? flockmates with [socialComparison self myself <= 50] [set flockmates turtles-here find-flockmates]
