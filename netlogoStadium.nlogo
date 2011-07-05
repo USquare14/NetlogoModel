@@ -1,3 +1,5 @@
+useless line of crap
+
 globals [middle rightExit]
 turtles-own [
   
@@ -655,7 +657,7 @@ SWITCH
 529
 preferExit
 preferExit
-0
+1
 1
 -1000
 
