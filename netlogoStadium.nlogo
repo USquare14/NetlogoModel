@@ -1,5 +1,3 @@
-useless line of crap
-
 globals [middle rightExit]
 turtles-own [
   
@@ -94,7 +92,6 @@ to setup
     ask n-of policeCount (patches with [ptype = "concourse" and not any? patches in-radius 2 with [ptype != "concourse"] ]) [ask patches in-radius 1 with [ptype = "concourse"] [set ptype "police" set pcolor blue set exit (min-one-of patches with [ptype = "exit"] [distance myself])]]]
   
   ask turtles [let famSize random 5 if count turtles in-radius 5 >= famsize [set family n-of  famSize turtles in-radius 6 ask family [set family [family] of myself set parkingLot [parkingLot] of myself ]]]
-  ask patches with [ptype != "exit"] [set exitNumber 20]
 end
 
 to getAttributes
@@ -255,8 +252,7 @@ let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
   if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself)) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself))]]]
 ;fd 1
-;if [exitNumber] of patch-here = parkingLot [set rightExit (rightExit + 1) die]
-if any? patches in-radius 1 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
+if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
 
 end
 
@@ -657,7 +653,7 @@ SWITCH
 529
 preferExit
 preferExit
-1
+0
 1
 -1000
 
