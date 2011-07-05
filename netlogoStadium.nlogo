@@ -92,6 +92,7 @@ to setup
     ask n-of policeCount (patches with [ptype = "concourse" and not any? patches in-radius 2 with [ptype != "concourse"] ]) [ask patches in-radius 1 with [ptype = "concourse"] [set ptype "police" set pcolor blue set exit (min-one-of patches with [ptype = "exit"] [distance myself])]]]
   
   ask turtles [let famSize random 5 if count turtles in-radius 5 >= famsize [set family n-of  famSize turtles in-radius 6 ask family [set family [family] of myself set parkingLot [parkingLot] of myself ]]]
+  
 end
 
 to getAttributes
@@ -109,6 +110,14 @@ to getAttributes
         set height 2 + abs round random-normal 50 4][
         set height 2 + abs round random-normal 47 4]] 
   millerFormula
+end
+
+to penOn
+  ask turtles[pen-down]
+end
+
+to penOff
+  ask turtles[pen-up]
 end
 
 ;replace with classification tree: leader, peer, no relation
@@ -250,9 +259,9 @@ if closestExit != Nobody [ face (closestExit)
 flock
 let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
-  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself)) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself))]]]
+  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself))]]]
 ;fd 1
-if any? patches in-radius 4 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 4 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
+if any? patches in-radius 1 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 1 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
 
 end
 
@@ -405,10 +414,10 @@ GRAPHICS-WINDOW
 ticks
 
 BUTTON
-97
-33
-160
-66
+78
+34
+141
+67
 Go
 go
 T
@@ -491,7 +500,7 @@ seatDensity
 seatDensity
 3
 50
-50
+3
 1
 1
 NIL
@@ -616,7 +625,7 @@ SWITCH
 260
 police
 police
-0
+1
 1
 -1000
 
@@ -656,6 +665,38 @@ preferExit
 0
 1
 -1000
+
+BUTTON
+149
+33
+222
+66
+NIL
+penOn\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+
+BUTTON
+228
+31
+302
+64
+NIL
+penOff
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
 
 @#$#@#$#@
 WHAT IS IT?
