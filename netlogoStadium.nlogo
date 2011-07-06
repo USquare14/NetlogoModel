@@ -133,6 +133,7 @@ to-report socialComparison [agent1 agent2]
 end
 
 to go
+  if ticks = 250 [set preferExit false]
   if count turtles = 0 [stop]
   tick
   if (ticks mod upperLevelRate) = 0 [
@@ -259,7 +260,7 @@ if closestExit != Nobody [ face (closestExit)
 flock
 let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
-  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (ptype = "exit" and exitNumber = [parkingLot] of myself))]]]
+  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ]]]
 ;fd 1
 if any? patches in-radius 1 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 1 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
 
@@ -500,7 +501,7 @@ seatDensity
 seatDensity
 3
 50
-3
+50
 1
 1
 NIL
@@ -612,7 +613,7 @@ leaderVolume
 leaderVolume
 3
 50
-6
+10
 1
 1
 NIL
@@ -662,7 +663,7 @@ SWITCH
 529
 preferExit
 preferExit
-0
+1
 1
 -1000
 
