@@ -269,7 +269,7 @@ end
 to flock  ;; turtle procedure
   
   ;flockmates too far away, find new flockmates
-  if count flockmates in-radius 10 < count flockmates [set flockmates turtles-here]
+  if count flockmates in-radius maxGroupSize < count flockmates [set flockmates turtles-here]
   if expandGroup = true [if random 10 < 7 [ask flockmates [set expandGroup false]]]
   if count flockmates < maxGroupSize and expandGroup = true [find-flockmates]
   if any? flockmates with [socialComparison self myself <= 50] [set flockmates turtles-here find-flockmates]
@@ -298,7 +298,7 @@ to-report leadershipFunction
 end
 
 to find-flockmates  ;; turtle procedure
-  let newFlockmates other turtles in-cone maxGroupSize 180  with [socialComparison self myself > 50 and (preferExit = false or parkingLot = [parkingLot] of myself)]
+  let newFlockmates other turtles in-cone maxGroupSize 180  with [socialComparison self myself > 30 and (preferExit = false or parkingLot = [parkingLot] of myself)]
   set flockmates (turtle-set flockmates newFlockmates family)
   ask flockmates [set flockmates (turtle-set ([flockmates] of myself) family)]
 end
@@ -588,7 +588,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-10
+30
 1
 1
 NIL
@@ -613,7 +613,7 @@ leaderVolume
 leaderVolume
 3
 50
-10
+24
 1
 1
 NIL
@@ -639,7 +639,7 @@ policeCount
 policeCount
 5
 60
-27
+5
 1
 1
 NIL
@@ -1065,6 +1065,24 @@ NetLogo 4.1.3
     <exitCondition>count turtles = 0</exitCondition>
     <metric>ticks</metric>
     <steppedValueSet variable="policeCount" first="5" step="1" last="60"/>
+  </experiment>
+  <experiment name="prefer exit" repetitions="3" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <exitCondition>count turtles = 0</exitCondition>
+    <metric>ticks</metric>
+    <enumeratedValueSet variable="preferExit">
+      <value value="true"/>
+      <value value="false"/>
+    </enumeratedValueSet>
+  </experiment>
+  <experiment name="GroupSize and LeaderVolume" repetitions="1" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <exitCondition>count turtles = 0</exitCondition>
+    <metric>ticks</metric>
+    <steppedValueSet variable="leaderVolume" first="3" step="3" last="24"/>
+    <steppedValueSet variable="maxGroupSize" first="5" step="5" last="30"/>
   </experiment>
 </experiments>
 @#$#@#$#@
