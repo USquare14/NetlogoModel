@@ -236,11 +236,15 @@ to learnExit
     ifelse preferExit = false [if any? turtles in-radius leaderVolume with [closestExit != nobody][ 
       set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody])]] [if
       any? turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself][
-      set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself])]
+      set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself])]]
       if closestExit != Nobody [let temp nobody
       ask closestExit  [set temp one-of patches in-radius 8 with [ptype = "exit"]]
-      set closestExit temp ]] ]]
+      set closestExit temp ] ]]
   ]
+  if closestExit = nobody and any? patches in-cone 10 70 with [ptype = "police"] [
+    ifelse preferExit = false [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police"]][
+      if any? patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself] [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself]]]]
+    
   
 end
 
@@ -253,16 +257,16 @@ to escapeBuilding
 ;if not any? flockmates [set heading (heading + random (60) - random 120)]
 if closestExit = nobody and learningType != "none" [learnExit]
 if closestExit = Nobody and groupLeader = true [locateExit] 
-if closestExit != Nobody [ face (closestExit) 
-  if distance closestExit <= 15 [set heading ( heading + random 50 - random 100)] 
-  ask other flockmates [set heading [heading] of myself + random 50 - random 100]]
+;if closestExit != Nobody [ face (closestExit) 
+ ; if distance closestExit <= 15 [set heading ( heading + random 50 - random 100)] 
+  ;ask other flockmates [set heading [heading] of myself + random 50 - random 100]]
 
 flock
 let safe avoid_obstacles
 ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
   if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ]]]
 ;fd 1
-if any? patches in-radius 1 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 1 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
+if any? patches in-radius 3 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 3 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
 
 end
 
@@ -588,7 +592,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-30
+8
 1
 1
 NIL
@@ -613,7 +617,7 @@ leaderVolume
 leaderVolume
 3
 50
-24
+17
 1
 1
 NIL
@@ -626,7 +630,7 @@ SWITCH
 260
 police
 police
-1
+0
 1
 -1000
 
@@ -639,7 +643,7 @@ policeCount
 policeCount
 5
 60
-5
+40
 1
 1
 NIL
@@ -1059,12 +1063,12 @@ NetLogo 4.1.3
     <metric>ticks</metric>
     <steppedValueSet variable="leaderVolume" first="3" step="2" last="21"/>
   </experiment>
-  <experiment name="PoliceCount" repetitions="1" runMetricsEveryStep="true">
+  <experiment name="PoliceCount" repetitions="1" runMetricsEveryStep="false">
     <setup>setup</setup>
     <go>go</go>
     <exitCondition>count turtles = 0</exitCondition>
     <metric>ticks</metric>
-    <steppedValueSet variable="policeCount" first="5" step="1" last="60"/>
+    <steppedValueSet variable="policeCount" first="10" step="2" last="50"/>
   </experiment>
   <experiment name="prefer exit" repetitions="3" runMetricsEveryStep="false">
     <setup>setup</setup>
