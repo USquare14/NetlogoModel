@@ -209,7 +209,11 @@ to locateExit
   if closestExit = nobody and any? patches in-cone 10 70 with [ptype = "police"] [
     ifelse preferExit = false [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police"]][
       if any? patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself] [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself]]]]
-    
+  
+  if closestExit != Nobody [let temp nobody
+      ask closestExit  [set temp one-of patches in-radius 8 with [ptype = "exit"]]
+      set closestExit temp 
+      face closestExit]  
       
 ;  ifelse exit = Nobody [
 ;    set leaderTurtle one-of turtles in-cone 10 70 with [closestExit != Nobody] 
@@ -237,14 +241,16 @@ to learnExit
       set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody])]] [if
       any? turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself][
       set closestExit [closestExit] of (one-of turtles in-radius leaderVolume with [closestExit != nobody and parkingLot = [parkingLot] of myself])]]
-      if closestExit != Nobody [let temp nobody
-      ask closestExit  [set temp one-of patches in-radius 8 with [ptype = "exit"]]
-      set closestExit temp ] ]]
+       ]]
   ]
   if closestExit = nobody and any? patches in-cone 10 70 with [ptype = "police"] [
     ifelse preferExit = false [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police"]][
       if any? patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself] [set closestExit [exit] of one-of patches in-cone 10 70 with [ptype = "police" and exitNumber = [parkingLot] of myself]]]]
-    
+  
+  if closestExit != Nobody [let temp nobody
+      ask closestExit  [set temp one-of patches in-radius 8 with [ptype = "exit"]]
+      set closestExit temp 
+      face closestExit]  
   
 end
 
@@ -263,8 +269,9 @@ if closestExit = Nobody and groupLeader = true [locateExit]
 
 flock
 let safe avoid_obstacles
-ifelse safe = true [fd 1] [ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 60)] [set heading (heading + random 30 - random 40)]
-  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ]]]
+ifelse safe = true [fd 1][ifelse closestExit != nobody [face closestExit set heading (heading + random 30 - random 40)] [set heading (heading + random 30 - random 40)]
+  if any? patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ] [
+    move-to one-of patches in-cone 2 150 with [count turtles-here = 0 and (ptype = "concourse" or (preferExit = false and ptype = "exit" or (ptype = "exit" and exitNumber = [parkingLot] of myself))) ]]]
 ;fd 1
 if any? patches in-radius 3 with [ptype = "exit"] [if [exitNumber] of one-of patches in-radius 3 with [ptype = "exit"] = parkingLot and preferExit = true [set rightExit (rightExit + 1)] set reachExit true die]
 
@@ -592,7 +599,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-8
+11
 1
 1
 NIL
