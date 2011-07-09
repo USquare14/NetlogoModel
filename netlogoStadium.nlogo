@@ -599,7 +599,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-11
+10
 1
 1
 NIL
@@ -624,7 +624,7 @@ leaderVolume
 leaderVolume
 3
 50
-17
+24
 1
 1
 NIL
