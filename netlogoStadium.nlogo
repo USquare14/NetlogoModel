@@ -133,7 +133,7 @@ to-report socialComparison [agent1 agent2]
 end
 
 to go
-  if ticks = 250 [set preferExit false]
+  ;if ticks = 250 [set preferExit false]
   if count turtles = 0 [stop]
   tick
   if (ticks mod upperLevelRate) = 0 [
@@ -261,6 +261,7 @@ to escapeBuilding
 
 
 ;if not any? flockmates [set heading (heading + random (60) - random 120)]
+if closestExit = nobody and flockCommunication = true and any? flockmates with [groupLeader = true and closestExit != nobody] [set closestExit [closestExit] of one-of flockmates with [groupLeader = true and closestExit != nobody]]
 if closestExit = nobody and learningType != "none" [learnExit]
 if closestExit = Nobody and groupLeader = true [locateExit] 
 ;if closestExit != Nobody [ face (closestExit) 
@@ -584,7 +585,7 @@ upperLevelRate
 upperLevelRate
 25
 200
-49
+25
 1
 1
 NIL
@@ -599,7 +600,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-10
+18
 1
 1
 NIL
@@ -616,15 +617,15 @@ learningType
 1
 
 SLIDER
-17
+11
 580
-189
+183
 613
 leaderVolume
 leaderVolume
 3
 50
-24
+5
 1
 1
 NIL
@@ -637,14 +638,14 @@ SWITCH
 260
 police
 police
-0
+1
 1
 -1000
 
 SLIDER
-20
+14
 626
-192
+186
 659
 policeCount
 policeCount
@@ -709,6 +710,17 @@ NIL
 NIL
 NIL
 NIL
+
+SWITCH
+13
+665
+198
+698
+flockCommunication
+flockCommunication
+0
+1
+-1000
 
 @#$#@#$#@
 WHAT IS IT?
@@ -1063,7 +1075,7 @@ NetLogo 4.1.3
     <metric>ticks</metric>
     <steppedValueSet variable="maxGroupSize" first="2" step="2" last="16"/>
   </experiment>
-  <experiment name="LeaderVolume" repetitions="3" runMetricsEveryStep="false">
+  <experiment name="LeaderVolume" repetitions="4" runMetricsEveryStep="false">
     <setup>setup</setup>
     <go>go</go>
     <exitCondition>count turtles = 0</exitCondition>
@@ -1094,6 +1106,13 @@ NetLogo 4.1.3
     <metric>ticks</metric>
     <steppedValueSet variable="leaderVolume" first="3" step="3" last="24"/>
     <steppedValueSet variable="maxGroupSize" first="5" step="5" last="30"/>
+  </experiment>
+  <experiment name="maxGroupSize" repetitions="4" runMetricsEveryStep="false">
+    <setup>setup</setup>
+    <go>go</go>
+    <exitCondition>count turtles = 0</exitCondition>
+    <metric>ticks</metric>
+    <steppedValueSet variable="maxGroupSize" first="2" step="2" last="20"/>
   </experiment>
 </experiments>
 @#$#@#$#@
