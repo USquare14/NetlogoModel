@@ -92,7 +92,7 @@ to setup
     ask n-of policeCount (patches with [ptype = "concourse" and not any? patches in-radius 2 with [ptype != "concourse"] ]) [ask patches in-radius 1 with [ptype = "concourse"] [set ptype "police" set pcolor blue set exit (min-one-of patches with [ptype = "exit"] [distance myself])]]]
   
   ask turtles [let famSize random 5 if count turtles in-radius 5 >= famsize [set family n-of  famSize turtles in-radius 6 ask family [set family [family] of myself set parkingLot [parkingLot] of myself ]]]
-  
+  ask turtles [set family (turtle-set turtles-here family) set flockmates family]
 end
 
 to getAttributes
@@ -215,11 +215,6 @@ to locateExit
       set closestExit temp 
       face closestExit]  
       
-;  ifelse exit = Nobody [
-;    set leaderTurtle one-of turtles in-cone 10 70 with [closestExit != Nobody] 
-;    if leaderTurtle != Nobody  [
-;      let ex Nobody ask leaderTurtle [
-;        set ex closestExit] set  closestExit ex  ]][set closestExit exit ]
 end 
 
 to learnExit 
@@ -258,7 +253,7 @@ end
  
 to escapeBuilding
 
-
+;if count flockmates = 0 [set flockmates turtles-here]
 
 ;if not any? flockmates [set heading (heading + random (60) - random 120)]
 if closestExit = nobody and flockCommunication = true and any? flockmates with [groupLeader = true and closestExit != nobody] [set closestExit [closestExit] of one-of flockmates with [groupLeader = true and closestExit != nobody]]
@@ -281,22 +276,28 @@ end
 to flock  ;; turtle procedure
   
   ;flockmates too far away, find new flockmates
-  if count flockmates in-radius maxGroupSize < count flockmates [set flockmates turtles-here]
+  if count flockmates in-radius maxGroupSize < count flockmates [set expandGroup true set flockmates turtles-here set groupLeader false]
+  
   if expandGroup = true [if random 10 < 7 [ask flockmates [set expandGroup false]]]
+  
   if count flockmates < maxGroupSize and expandGroup = true [find-flockmates]
-  if any? flockmates with [socialComparison self myself <= 50] [set flockmates turtles-here find-flockmates]
+
+  ;if any? flockmates with [socialComparison self myself <= 50] [set expandGroup true set flockmates turtles-here set groupLeader false]
+  
   if not any? flockmates with [groupLeader = true] [locateExit]
-  ask flockmates [set flockmates [flockmates] of myself]
+  
   if any? other flockmates
     [ find-nearest-neighbor
       ifelse distance nearest-neighbor <= 1
         [ separate ]
         [ align
           cohere ] ]
+    
   if leadershipFunction > 70 [makeLeader]
   
 end
 to makeLeader 
+  set groupLeader false
   ask flockmates [set groupLeader false]
   ask max-one-of flockmates [leadershipFunction][set groupLeader true]
 end
@@ -306,13 +307,16 @@ to-report leadershipFunction
   if child = false [set leaderValue (leaderValue + 50)]
   set leaderValue (leaderValue + .5 * age)
   set leaderValue (leaderValue + .5 * weight)
+  if count flockmates = 1 [set leaderValue 0]
   report leaderValue
 end
 
 to find-flockmates  ;; turtle procedure
-  let newFlockmates other turtles in-cone maxGroupSize 180  with [socialComparison self myself > 30 and (preferExit = false or parkingLot = [parkingLot] of myself)]
-  set flockmates (turtle-set flockmates newFlockmates family)
-  ask flockmates [set flockmates (turtle-set ([flockmates] of myself) family)]
+  let newFlockmates other turtles in-radius (maxGroupSize)  with [socialComparison self myself > 20 and reachConcourse = true and expandGroup = true and (preferExit = false or parkingLot = [parkingLot] of myself)]
+  ask newFlockmates [ask myself [set flockmates (turtle-set flockmates [flockmates] of myself)]]
+  
+  ask flockmates [set flockmates [flockmates] of myself]
+  if count flockmates with [groupLeader = true] > 1 [ask flockmates [set groupLeader false]]
 end
 
 to find-nearest-neighbor ;; turtle procedure
@@ -600,7 +604,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-7
+29
 1
 1
 NIL
