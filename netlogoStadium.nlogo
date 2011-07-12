@@ -276,10 +276,10 @@ end
 to flock  ;; turtle procedure
   
   ;flockmates too far away, find new flockmates
-  if count flockmates in-radius maxGroupSize < count flockmates [set expandGroup true set flockmates turtles-here set groupLeader false]
+  ;if count flockmates in-radius maxGroupSize < count flockmates [set expandGroup true set flockmates turtles-here set groupLeader false]
   
-  if expandGroup = true [if random 10 < 7 [ask flockmates [set expandGroup false]]]
-  
+  ;if expandGroup = true [if random 10 < 2 [ask flockmates [set expandGroup false]]]
+  if count flockmates > maxGroupSize [ask flockmates [set expandGroup false]]
   if count flockmates < maxGroupSize and expandGroup = true [find-flockmates]
 
   ;if any? flockmates with [socialComparison self myself <= 50] [set expandGroup true set flockmates turtles-here set groupLeader false]
@@ -312,11 +312,16 @@ to-report leadershipFunction
 end
 
 to find-flockmates  ;; turtle procedure
-  let newFlockmates other turtles in-radius (maxGroupSize)  with [socialComparison self myself > 20 and reachConcourse = true and expandGroup = true and (preferExit = false or parkingLot = [parkingLot] of myself)]
-  ask newFlockmates [ask myself [set flockmates (turtle-set flockmates [flockmates] of myself)]]
-  
-  ask flockmates [set flockmates [flockmates] of myself]
-  if count flockmates with [groupLeader = true] > 1 [ask flockmates [set groupLeader false]]
+;  let newFlockmates other turtles in-radius (maxGroupSize)  with [socialComparison self myself > 20 and reachConcourse = true and expandGroup = true and (preferExit = false or parkingLot = [parkingLot] of myself)]
+;  ask newFlockmates [ask myself [set flockmates (turtle-set flockmates [flockmates] of myself)]]
+;  
+;  ask flockmates [set flockmates [flockmates] of myself]
+;  if count flockmates with [groupLeader = true] > 1 [ask flockmates [set groupLeader false]]
+
+ set flockmates turtles in-radius (maxGroupSize)  with [;socialComparison self myself > 20 and 
+   reachConcourse = true and expandGroup = true and (preferExit = false or parkingLot = [parkingLot] of myself)]
+ ask flockmates [set flockmates [flockmates] of myself]
+ if count flockmates with [groupLeader = true] > 1 [ask flockmates [set groupLeader false]]
 end
 
 to find-nearest-neighbor ;; turtle procedure
@@ -604,7 +609,7 @@ maxGroupSize
 maxGroupSize
 2
 30
-29
+5
 1
 1
 NIL
@@ -629,7 +634,7 @@ leaderVolume
 leaderVolume
 3
 50
-21
+5
 1
 1
 NIL
@@ -722,7 +727,7 @@ SWITCH
 698
 flockCommunication
 flockCommunication
-0
+1
 1
 -1000
 
