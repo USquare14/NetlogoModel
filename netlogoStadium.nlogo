@@ -634,7 +634,7 @@ leaderVolume
 leaderVolume
 3
 50
-25
+5
 1
 1
 NIL
@@ -1122,13 +1122,6 @@ NetLogo 4.1.3
     <exitCondition>count turtles = 0</exitCondition>
     <metric>ticks</metric>
     <steppedValueSet variable="maxGroupSize" first="2" step="2" last="20"/>
-  </experiment>
-  <experiment name="Longer LeaderVolume" repetitions="10" runMetricsEveryStep="false">
-    <setup>setup</setup>
-    <go>go</go>
-    <exitCondition>count turtles = 0</exitCondition>
-    <metric>ticks</metric>
-    <steppedValueSet variable="leaderVolume" first="3" step="2" last="25"/>
   </experiment>
 </experiments>
 @#$#@#$#@
