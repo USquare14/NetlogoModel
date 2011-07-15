@@ -734,12 +734,12 @@ flockCommunication
 @#$#@#$#@
 WHAT IS IT?
 -----------
-My model is a simulation of a stadium evacuation in an emergency situation. It explores crowd behavior and focuses on the act of grouping within a crowd. Groups form based on a number of factors and characteristics. Within each group there is a leader who is more cognicent of his or her surroundings than the rest of the members of the group. This leader is responsible for leading the group towards an exit.
+My model is a simulation of a stadium evacuation in an emergency situation. It explores crowd behavior and focuses on the act of grouping within a crowd. Groups form based on a number of factors and characteristics. Within each group there is a leader who is more cognicent of his or her surroundings than the rest of the members of the group. This leader is responsible for leading the group towards an exit. Gropu members can communicate either with eachother or with teh group leader depending on various settings at the initialization step. Additionally, the group leader may be able to learn from other groups. Policemen can be added to convey the location of the nearest exit to anybody who sees them in passing.
 
 
 HOW IT WORKS
 ------------
-This section could explain what rules the agents use to create the overall behavior of the model.
+The model is made up of three main sections or steps. Step one is to locate and move towards a close aisle from the initial position in seats. Step two is to move towards the concourse, queueing if it is not possible to move yet. Step three is movement within the concourse with the goal of locating an exit and exiting the building. Built in to the movement in the concourse is flocking or grouping with others who are similar and share the common goal of exiting the stadium.
 
 
 HOW TO USE IT
@@ -749,7 +749,7 @@ This section could explain how to use the model, including a description of each
 
 THINGS TO NOTICE
 ----------------
-Groups form and continue to grow with a 33% probability until they reach a critical mass as defined by the user. The leader is originally the founder of the group until a qualified "leader" is found in the group. The leader is the person who looks for the exit, communicates to some members in the group, and between groups. Leaders speak at a particular volume which determines a radius within which the leader can tell other groupmates information. Movement is essentially flocking behavior with built in obstacle avoidance.
+Groups form and continue to grow with a small probability until they reach a critical mass as defined by the user. The leader is originally the founder of the group until a qualified "leader" is found in the group. The leader is the person who looks for the exit, communicates to some members in the group, and between groups. Leaders speak at a particular volume which determines a radius within which the leader can tell other groupmates information. Movement is essentially flocking behavior with built in obstacle avoidance.
 
 
 THINGS TO TRY
