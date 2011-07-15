@@ -769,16 +769,16 @@ This section could point out any especially interesting or unusual features of N
 
 RELATED MODELS
 --------------
-This section could give the names of models in the NetLogo Models Library or elsewhere which are of related interest.
+Flocking
 
 
 CREDITS AND REFERENCES
 ----------------------
 COPYRIGHT NOTICE FOR FLOCKING
-Copyright 1998 Uri Wilensky. All rights reserved.
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed: a) this copyright notice is included. b) this model will not be redistributed for profit without permission from Uri Wilensky. Contact Uri Wilensky for appropriate licenses for redistribution for profit.
-This model was created as part of the project: CONNECTED MATHEMATICS: MAKING SENSE OF COMPLEX PHENOMENA THROUGH BUILDING OBJECT-BASED PARALLEL MODELS (OBPML). The project gratefully acknowledges the support of the National Science Foundation (Applications of Advanced Technologies Program) -- grant numbers RED #9552950 and REC #9632612.
-This model was converted to NetLogo as part of the projects: PARTICIPATORY SIMULATIONS: NETWORK-BASED DESIGN FOR SYSTEMS LEARNING IN CLASSROOMS and/or INTEGRATED SIMULATION AND MODELING ENVIRONMENT. The project gratefully acknowledges the support of the National Science Foundation (REPP & ROLE programs) -- grant numbers REC #9814682 and REC-0126227. Converted from StarLogoT to NetLogo, 2002.
+	Copyright 1998 Uri Wilensky. All rights reserved.
+	Permission to use, modify or redistribute this model is hereby granted, provided 		that both of the following requirements are followed: a) this copyright notice is 	included. b) this model will not be redistributed for profit without permission 		from Uri Wilensky. Contact Uri Wilensky for appropriate licenses for 				redistribution for profit.
+	This model was created as part of the project: CONNECTED MATHEMATICS: MAKING 			SENSE OF COMPLEX PHENOMENA THROUGH BUILDING OBJECT-BASED PARALLEL MODELS (OBPML). 	The project gratefully acknowledges the support of the National Science 			Foundation (Applications of Advanced Technologies Program) -- grant numbers RED 		#9552950 and REC #9632612.
+	This model was converted to NetLogo as part of the projects: PARTICIPATORY 			SIMULATIONS: NETWORK-BASED DESIGN FOR SYSTEMS LEARNING IN CLASSROOMS and/or 			INTEGRATED SIMULATION AND MODELING ENVIRONMENT. The project gratefully 				acknowledges the support of the National Science Foundation (REPP & ROLE 			programs) -- grant numbers REC #9814682 and REC-0126227. Converted from StarLogoT 	to NetLogo, 2002.
 @#$#@#$#@
 default
 true
